@@ -19,7 +19,7 @@ const PATHS: Record<SimpleCatalogTable, string> = {
 };
 
 export async function createCatalogRow(table: SimpleCatalogTable, formData: FormData) {
-  const supabase = createClient();
+  const supabase = createClient() as any;
 
   const payload: Record<string, unknown> = {
     name: String(formData.get('name') ?? '').trim()
@@ -48,7 +48,7 @@ export async function toggleCatalogRow(table: SimpleCatalogTable, formData: Form
   const active = String(formData.get('active') ?? '1') === '1';
   if (!id) return;
 
-  const supabase = createClient();
+  const supabase = createClient() as any;
   await supabase.from(table as any).update({ active: !active } as any).eq('id', id);
   revalidatePath(PATHS[table]);
 }
@@ -57,7 +57,7 @@ export async function deleteCatalogRow(table: SimpleCatalogTable, formData: Form
   const id = String(formData.get('id') ?? '');
   if (!id) return;
 
-  const supabase = createClient();
+  const supabase = createClient() as any;
   const { error } = await supabase.from(table as any).delete().eq('id', id);
   if (error) console.error(`[catalog:${table}] delete`, error);
   revalidatePath(PATHS[table]);
