@@ -17,10 +17,6 @@ export const metadata: Metadata = {
   title: 'Búho Core',
   description: 'Gestión Inteligente de Propiedades por Buho Property',
   manifest: '/manifest.json',
-  icons: {
-    icon: '/favicon.ico',
-    apple: '/icon.png',
-  },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
