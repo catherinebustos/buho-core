@@ -126,3 +126,9 @@ npm run start      # servidor de producción
 npm run lint       # eslint
 npm run types:gen  # regenerar tipos desde Supabase
 ```
+
+## Estado Actual (Abril 2026)
+
+- Refactorización de tipos completada para utilizar helpers `Tables` y `Enums`.
+- Fix de casting dinámico implementado para asegurar despliegues exitosos en Vercel.
+- Documentación técnica interna actualizada en el sistema de conocimiento del agente.
