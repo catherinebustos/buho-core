@@ -7,7 +7,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { EmptyState } from '@/components/ui/empty-state';
 import { formatDate } from '@/lib/utils';
 import { toggleUserActive } from './actions';
-import type { Profile, UserRole } from '@/lib/types/database.generated';
+import type { Profile, UserRole } from '@/lib/types/database';
 
 export default async function UsersListPage({
   searchParams

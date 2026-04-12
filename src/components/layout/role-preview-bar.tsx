@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation';
 import { Eye, X } from 'lucide-react';
 import { setPreviewRole } from '@/app/(app)/preview-role/actions';
 import { ROLE_LABELS } from '@/lib/constants';
-import type { UserRole } from '@/lib/types/database.generated';
+import type { UserRole } from '@/lib/types/database';
 
 const ROLES: UserRole[] = ['cleaner', 'supervisor', 'admin', 'super_admin'];
 

@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/table';
 import { formatDateTime } from '@/lib/utils';
 import { ShieldCheck } from 'lucide-react';
-import type { UserRole } from '@/lib/types/database.generated';
+import type { UserRole } from '@/lib/types/database';
 
 const ACTION_VARIANT: Record<string, 'default' | 'outline' | 'destructive'> = {
   INSERT: 'default',

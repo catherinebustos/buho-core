@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
-import type { Profile, UserRole } from '@/lib/types/database.generated';
+import type { Profile, UserRole } from '@/lib/types/database';
 import { PREVIEW_COOKIE, ROLE_LABELS, ROLE_RANK } from '@/lib/constants';
 
 export { PREVIEW_COOKIE, ROLE_LABELS };

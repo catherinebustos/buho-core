@@ -3,7 +3,7 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
-import type { UserRole } from '@/lib/types/database.generated';
+import type { UserRole } from '@/lib/types/database';
 import { PREVIEW_COOKIE } from '@/lib/constants';
 
 const VALID_ROLES: UserRole[] = ['super_admin', 'admin', 'supervisor', 'cleaner'];

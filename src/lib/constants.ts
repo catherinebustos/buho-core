@@ -1,4 +1,4 @@
-import type { UserRole } from '@/lib/types/database.generated';
+import type { UserRole } from '@/lib/types/database';
 
 export const PREVIEW_COOKIE = 'buhoops_preview_role';
 
