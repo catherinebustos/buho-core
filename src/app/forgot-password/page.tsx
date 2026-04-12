@@ -43,8 +43,8 @@ export default function ForgotPasswordPage({
               <div className="space-y-3">
                 <Step n="1" emoji="📧">
                   Buscá un mail de{' '}
-                  <span className="font-mono text-xs bg-white border border-zinc-200 rounded px-1.5 py-0.5 text-zinc-700">
-                    noreply@mail.app.supabase.io
+                  <span className="font-semibold text-zinc-800">
+                    Supabase Auth
                   </span>
                 </Step>
 

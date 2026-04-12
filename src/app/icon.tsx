@@ -16,19 +16,16 @@ export default function Icon() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: '#000000', // Negro absoluto para máxima sofisticación (OLED aesthetic)
-          borderRadius: '25%',   // Curvatura delicada
-          border: '2px solid rgba(253, 106, 59, 0.15)', // Reflejo naranja muy sutil en el borde exterior
+          background: '#FD6A3B', // El Naranja Real de la App
+          borderRadius: '25%',   // Los bordes redondeados clásicos
         }}
       >
         <span
           style={{
-            color: '#FD6A3B', // El verdadero "Electric Core Orange" de la app
-            fontSize: '20px',
-            fontWeight: 900,
+            color: '#FFFFFF',
+            fontSize: '22px', // Tamaño proporcional al contenedor de 32x32
+            fontWeight: 900,  // Ultra negrita
             fontFamily: 'sans-serif',
-            lineHeight: 1,
-            marginTop: '2px' // Ajuste fino óptico para centrado vertical
           }}
         >
           B
