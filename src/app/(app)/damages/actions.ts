@@ -25,7 +25,7 @@ export async function updateDamageStatus(formData: FormData) {
     patch.resolved_at = null;
   }
 
-  const { error } = await supabase.from('damage_reports').update(patch).eq('id', id);
+  const { error } = await (supabase as any).from('damage_reports').update(patch).eq('id', id);
   if (error) {
     redirect(`/damages/${id}?error=` + encodeURIComponent(error.message));
   }

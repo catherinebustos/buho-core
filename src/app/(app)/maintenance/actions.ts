@@ -22,8 +22,8 @@ export async function createMaintenanceRequest(formData: FormData) {
     reported_by:      profile.id,
   };
 
-  const { data, error } = await supabase
-    .from('maintenance_requests' as any)
+  const { data, error } = await (supabase as any)
+    .from('maintenance_requests')
     .insert(payload)
     .select('id')
     .single();
@@ -59,8 +59,8 @@ export async function updateMaintenanceRequest(id: string, formData: FormData) {
     });
   }
 
-  const { error } = await supabase
-    .from('maintenance_requests' as any)
+  const { error } = await (supabase as any)
+    .from('maintenance_requests')
     .update(basePayload)
     .eq('id', id);
 
