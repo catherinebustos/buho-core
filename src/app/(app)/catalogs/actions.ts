@@ -38,7 +38,7 @@ export async function createCatalogRow(table: SimpleCatalogTable, formData: Form
     if (notes) payload.notes = notes;
   }
 
-  const { error } = await supabase.from(table).insert(payload as any);
+  const { error } = await supabase.from(table as any).insert(payload as any);
   if (error) console.error(`[catalog:${table}] insert`, error);
   revalidatePath(PATHS[table]);
 }
@@ -49,7 +49,7 @@ export async function toggleCatalogRow(table: SimpleCatalogTable, formData: Form
   if (!id) return;
 
   const supabase = createClient();
-  await supabase.from(table).update({ active: !active } as any).eq('id', id);
+  await supabase.from(table as any).update({ active: !active } as any).eq('id', id);
   revalidatePath(PATHS[table]);
 }
 
@@ -58,7 +58,7 @@ export async function deleteCatalogRow(table: SimpleCatalogTable, formData: Form
   if (!id) return;
 
   const supabase = createClient();
-  const { error } = await supabase.from(table).delete().eq('id', id);
+  const { error } = await supabase.from(table as any).delete().eq('id', id);
   if (error) console.error(`[catalog:${table}] delete`, error);
   revalidatePath(PATHS[table]);
 }
