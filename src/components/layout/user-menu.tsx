@@ -2,7 +2,8 @@ import { LogOut } from 'lucide-react';
 import { logout } from '@/app/login/actions';
 import { Button } from '@/components/ui/button';
 import { ROLE_LABELS } from '@/lib/constants';
-import type { Profile } from '@/lib/types/database.generated';
+import type { Tables } from '@/lib/types/database.generated';
+type Profile = Tables<'profiles'>;
 
 export function UserMenu({ profile }: { profile: Profile }) {
   const initials = profile.full_name

@@ -5,7 +5,9 @@ import { Label } from '@/components/ui/label';
 import { EmptyState } from '@/components/ui/empty-state';
 import { formatDateTime } from '@/lib/utils';
 import { assignCleaner, unassignCleaner } from '@/app/(app)/properties/actions';
-import type { Profile, PropertyAssignment } from '@/lib/types/database.generated';
+import type { Tables } from '@/lib/types/database.generated';
+type Profile = Tables<'profiles'>;
+type PropertyAssignment = Tables<'property_assignments'>;
 
 interface AssignmentRow extends PropertyAssignment {
   profiles: Pick<Profile, 'id' | 'full_name' | 'email' | 'role'> | null;

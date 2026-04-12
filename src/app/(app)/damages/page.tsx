@@ -6,7 +6,9 @@ import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/ui/empty-state';
 import { FilterSelect } from '@/components/ui/filter-select';
 import { formatDateTime } from '@/lib/utils';
-import type { DamageStatus, DamageUrgency } from '@/lib/types/database.generated';
+import type { Enums } from '@/lib/types/database.generated';
+type DamageStatus = Enums<'damage_status'>;
+type DamageUrgency = Enums<'damage_urgency'>;
 
 const URGENCY_LABEL: Record<DamageUrgency, string> = {
   baja: 'Baja',

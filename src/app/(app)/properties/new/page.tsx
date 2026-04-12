@@ -3,7 +3,8 @@ import { createClient } from '@/lib/supabase/server';
 import { Building2 } from 'lucide-react';
 import { PropertyForm } from '@/components/properties/property-form';
 import { createProperty } from '../actions';
-import type { PropertyType } from '@/lib/types/database.generated';
+import type { Tables } from '@/lib/types/database.generated';
+type PropertyType = Tables<'property_types'>;
 
 export default async function NewPropertyPage({
   searchParams

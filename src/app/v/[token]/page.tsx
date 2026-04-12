@@ -11,7 +11,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { submitVisit } from './actions';
-import type { Item, ItemCategory, VisitType } from '@/lib/types/database.generated';
+import type { Tables } from '@/lib/types/database.generated';
+type Item = Tables<'items'>;
+type ItemCategory = Tables<'item_categories'>;
+type VisitType = Tables<'visit_types'>;
 
 export default async function QrVisitPage({
   params,

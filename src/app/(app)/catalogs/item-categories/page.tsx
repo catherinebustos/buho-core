@@ -5,7 +5,8 @@ import { Label } from '@/components/ui/label';
 import { Select } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { createCatalogRow, deleteCatalogRow, toggleCatalogRow } from '../actions';
-import type { ItemCategory } from '@/lib/types/database.generated';
+import type { Tables } from '@/lib/types/database.generated';
+type ItemCategory = Tables<'item_categories'>;
 
 export default async function ItemCategoriesPage() {
   await requireRole('super_admin');

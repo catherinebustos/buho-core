@@ -11,7 +11,10 @@ import { AssignmentsPanel } from '@/components/properties/assignments-panel';
 import { QrPreview } from '@/components/properties/qr-preview';
 import { PropertyPhotosPanel } from '@/components/properties/photos-panel';
 import { formatDateTime } from '@/lib/utils';
-import type { Profile, Property, PropertyAssignment } from '@/lib/types/database.generated';
+import type { Tables } from '@/lib/types/database.generated';
+type Profile = Tables<'profiles'>;
+type Property = Tables<'properties'>;
+type PropertyAssignment = Tables<'property_assignments'>;
 
 export default async function PropertyDetailPage({
   params,

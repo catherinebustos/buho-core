@@ -2,7 +2,8 @@ import { requireRole } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
 import { SimpleCatalog } from '@/components/catalogs/simple-catalog';
 import { createCatalogRow, deleteCatalogRow, toggleCatalogRow } from '../actions';
-import type { PropertyType } from '@/lib/types/database.generated';
+import type { Tables } from '@/lib/types/database.generated';
+type PropertyType = Tables<'property_types'>;
 
 export default async function PropertyTypesPage() {
   await requireRole('super_admin');

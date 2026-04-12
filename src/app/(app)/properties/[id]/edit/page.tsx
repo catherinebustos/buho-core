@@ -4,7 +4,9 @@ import { createClient } from '@/lib/supabase/server';
 import { Building2 } from 'lucide-react';
 import { PropertyForm } from '@/components/properties/property-form';
 import { updateProperty } from '../../actions';
-import type { Property, PropertyType } from '@/lib/types/database.generated';
+import type { Tables } from '@/lib/types/database.generated';
+type Property = Tables<'properties'>;
+type PropertyType = Tables<'property_types'>;
 
 export default async function EditPropertyPage({
   params,

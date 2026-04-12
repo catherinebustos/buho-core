@@ -2,7 +2,10 @@ import { requireRole } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
 import { TicketForm } from '@/components/tickets/ticket-form';
 import { createTicket } from '../actions';
-import type { Item, Property, Supplier } from '@/lib/types/database.generated';
+import type { Tables } from '@/lib/types/database.generated';
+type Item = Tables<'items'>;
+type Property = Tables<'properties'>;
+type Supplier = Tables<'suppliers'>;
 
 export default async function NewTicketPage({
   searchParams

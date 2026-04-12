@@ -5,7 +5,9 @@ import { Label } from '@/components/ui/label';
 import { Select } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { createCatalogRow, deleteCatalogRow, toggleCatalogRow } from '../actions';
-import type { Item, ItemCategory } from '@/lib/types/database.generated';
+import type { Tables } from '@/lib/types/database.generated';
+type Item = Tables<'items'>;
+type ItemCategory = Tables<'item_categories'>;
 
 type ItemWithCategory = Item & { item_categories: Pick<ItemCategory, 'name' | 'kind'> | null };
 

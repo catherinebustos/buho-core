@@ -10,7 +10,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { formatCLP } from '@/lib/utils';
-import type { Item, Property, Supplier } from '@/lib/types/database.generated';
+import type { Tables } from '@/lib/types/database.generated';
+type Item = Tables<'items'>;
+type Property = Tables<'properties'>;
+type Supplier = Tables<'suppliers'>;
 
 interface Line {
   key: string;

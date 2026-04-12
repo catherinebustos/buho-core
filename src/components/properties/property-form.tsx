@@ -5,7 +5,9 @@ import { Select } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ArrowRight, X } from 'lucide-react';
-import type { Property, PropertyType } from '@/lib/types/database.generated';
+import type { Tables } from '@/lib/types/database.generated';
+type Property = Tables<'properties'>;
+type PropertyType = Tables<'property_types'>;
 
 interface PropertyFormProps {
   property?: Partial<Property>;

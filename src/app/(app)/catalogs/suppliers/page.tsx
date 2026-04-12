@@ -4,7 +4,8 @@ import { SimpleCatalog } from '@/components/catalogs/simple-catalog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { createCatalogRow, deleteCatalogRow, toggleCatalogRow } from '../actions';
-import type { Supplier } from '@/lib/types/database.generated';
+import type { Tables } from '@/lib/types/database.generated';
+type Supplier = Tables<'suppliers'>;
 
 export default async function SuppliersPage() {
   await requireRole('super_admin');

@@ -8,7 +8,8 @@ import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Users, ArrowRight, X, KeySquare } from 'lucide-react';
 import { updateUser, resetUserPassword } from '../../actions';
-import type { Profile } from '@/lib/types/database.generated';
+import type { Tables } from '@/lib/types/database.generated';
+type Profile = Tables<'profiles'>;
 
 export default async function EditUserPage({
   params,

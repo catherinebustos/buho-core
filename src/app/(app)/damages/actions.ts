@@ -3,7 +3,8 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
-import type { DamageStatus } from '@/lib/types/database.generated';
+import type { Enums } from '@/lib/types/database.generated';
+type DamageStatus = Enums<'damage_status'>;
 
 const VALID_STATUSES: DamageStatus[] = ['pendiente', 'en_proceso', 'resuelto', 'descartado'];
 
