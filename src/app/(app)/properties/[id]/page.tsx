@@ -24,7 +24,7 @@ export default async function PropertyDetailPage({
   searchParams: { error?: string };
 }) {
   const profile = await requireProfile();
-  const canManage = hasRoleAtLeast(profile.role, 'admin');
+  const canManage = hasRoleAtLeast(profile.role, 'supervisor');
   const supabase = createClient();
 
   const { data: propertyRaw } = await supabase

@@ -23,7 +23,7 @@ export default async function PropertiesListPage({
   searchParams: { q?: string; city?: string; status?: string };
 }) {
   const profile = await requireProfile();
-  const canCreate = hasRoleAtLeast(profile.role, 'admin');
+  const canCreate = hasRoleAtLeast(profile.role, 'supervisor');
   const supabase = createClient();
 
   let query = supabase
