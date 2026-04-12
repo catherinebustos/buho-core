@@ -1,0 +1,70 @@
+import { requireRole } from '@/lib/auth';
+import { createClient } from '@/lib/supabase/server';
+import { SimpleCatalog } from '@/components/catalogs/simple-catalog';
+import { Label } from '@/components/ui/label';
+import { Select } from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
+import { createCatalogRow, deleteCatalogRow, toggleCatalogRow } from '../actions';
+import type { Item, ItemCategory } from '@/lib/types/database.generated';
+
+type ItemWithCategory = Item & { item_categories: Pick<ItemCategory, 'name' | 'kind'> | null };
+
+export default async function ItemsPage() {
+  await requireRole('super_admin');
+  const supabase = createClient();
+
+  const [{ data: items }, { data: categories }] = await Promise.all([
+    supabase
+      .from('items')
+      .select('*, item_categories(name, kind)')
+      .order('name'),
+    supabase.from('item_categories').select('*').eq('active', true).order('sort_order')
+  ]);
+
+  const rows = (items as unknown as ItemWithCategory[]) ?? [];
+  const cats = (categories as ItemCategory[]) ?? [];
+
+  const create = createCatalogRow.bind(null, 'items');
+  const toggle = toggleCatalogRow.bind(null, 'items');
+  const del = deleteCatalogRow.bind(null, 'items');
+
+  return (
+    <SimpleCatalog<ItemWithCategory>
+      title="Ítems"
+      description="Consumibles y elementos esporádicos usados en las propiedades"
+      rows={rows}
+      createAction={create}
+      toggleAction={toggle}
+      deleteAction={del}
+      extraColumns={[
+        { key: 'category', label: 'Categoría' },
+        { key: 'unit', label: 'Unidad' }
+      ]}
+      renderExtraCells={(row) => (
+        <>
+          <td className="p-3 align-middle text-sm">
+            {row.item_categories?.name ?? '—'}{' '}
+            <span className="text-xs text-muted-foreground">({row.item_categories?.kind})</span>
+          </td>
+          <td className="p-3 align-middle text-sm text-muted-foreground">{row.unit}</td>
+        </>
+      )}
+    >
+      <div className="min-w-48 space-y-2">
+        <Label htmlFor="category_id">Categoría</Label>
+        <Select id="category_id" name="category_id" required>
+          <option value="">— Selecciona —</option>
+          {cats.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.name} ({c.kind})
+            </option>
+          ))}
+        </Select>
+      </div>
+      <div className="w-32 space-y-2">
+        <Label htmlFor="unit">Unidad</Label>
+        <Input id="unit" name="unit" defaultValue="unidad" />
+      </div>
+    </SimpleCatalog>
+  );
+}
