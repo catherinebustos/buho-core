@@ -27,7 +27,7 @@ export default function ForgotPasswordPage({
 
             <div>
               <h1 className="font-heading text-2xl font-black tracking-tight text-zinc-900">
-                ¡Andamo'!
+                ¡Andamo&apos;!
               </h1>
               <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
                 El mail ya va en camino. Mirá tu bandeja de entrada — no tarda.
@@ -50,7 +50,7 @@ export default function ForgotPasswordPage({
 
                 <Step n="2" emoji="🔍">
                   El asunto es{' '}
-                  <span className="font-semibold text-zinc-800">"Reset Your Password"</span>
+                  <span className="font-semibold text-zinc-800">&quot;Reset Your Password&quot;</span>
                   {' '}— buscalo así nomás.
                 </Step>
 
