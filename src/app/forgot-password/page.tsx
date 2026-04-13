@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -16,8 +17,13 @@ export default function ForgotPasswordPage({
       <div className="w-full max-w-sm space-y-8">
 
         {/* Logo */}
-        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-2xl font-black text-white shadow-xl">
-          B
+        <div className="relative h-12 w-32">
+          <Image
+            src="/logo.png"
+            alt="Buho Property Logo"
+            fill
+            className="object-contain object-left"
+          />
         </div>
 
         {searchParams.sent ? (

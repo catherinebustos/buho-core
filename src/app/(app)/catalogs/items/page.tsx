@@ -9,7 +9,10 @@ import type { Tables } from '@/lib/types/database.generated';
 type Item = Tables<'items'>;
 type ItemCategory = Tables<'item_categories'>;
 
-type ItemWithCategory = Item & { item_categories: Pick<ItemCategory, 'name' | 'kind'> | null };
+type ItemWithCategory = Item & {
+  item_categories: Pick<ItemCategory, 'name' | 'kind'> | null;
+  units_per_package?: number;
+};
 
 export default async function ItemsPage() {
   await requireRole('super_admin');
@@ -40,7 +43,8 @@ export default async function ItemsPage() {
       deleteAction={del}
       extraColumns={[
         { key: 'category', label: 'Categoría' },
-        { key: 'unit', label: 'Unidad' }
+        { key: 'unit', label: 'Unidad' },
+        { key: 'units_per_package', label: 'Contenido/unidad' }
       ]}
       renderExtraCells={(row) => (
         <>
@@ -49,6 +53,15 @@ export default async function ItemsPage() {
             <span className="text-xs text-muted-foreground">({row.item_categories?.kind})</span>
           </td>
           <td className="p-3 align-middle text-sm text-muted-foreground">{row.unit}</td>
+          <td className="p-3 align-middle text-sm tabular-nums">
+            {(row as any).units_per_package && (row as any).units_per_package > 1 ? (
+              <span className="font-medium text-blue-600 dark:text-blue-400">
+                {(row as any).units_per_package} {row.unit}/unidad
+              </span>
+            ) : (
+              <span className="text-muted-foreground">1 (sin desglose)</span>
+            )}
+          </td>
         </>
       )}
     >
@@ -66,6 +79,19 @@ export default async function ItemsPage() {
       <div className="w-32 space-y-2">
         <Label htmlFor="unit">Unidad</Label>
         <Input id="unit" name="unit" defaultValue="unidad" />
+      </div>
+      <div className="w-40 space-y-2">
+        <Label htmlFor="units_per_package">Contenido/unidad</Label>
+        <Input
+          id="units_per_package"
+          name="units_per_package"
+          type="number"
+          min="1"
+          step="1"
+          defaultValue="1"
+          title="Cuántas unidades individuales contiene cada unidad comprada (ej: 40 rollos por paquete)"
+        />
+        <p className="text-xs text-muted-foreground">Ej: 40 rollos por paquete</p>
       </div>
     </SimpleCatalog>
   );

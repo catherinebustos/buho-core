@@ -28,8 +28,14 @@ export default function LoginPage({
         {/* Degrade y Capa de Texto */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
         <div className="relative z-10 p-8 lg:p-16">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-2xl font-black text-white shadow-xl mb-6">
-            B
+          <div className="relative h-16 w-48 mb-6">
+            <Image
+              src="/logo.png"
+              alt="Buho Property Logo"
+              fill
+              className="object-contain object-left"
+              priority
+            />
           </div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-white/80 text-xs font-bold mb-4 uppercase tracking-widest backdrop-blur-sm border border-white/10">
             Búho Core
@@ -47,6 +53,14 @@ export default function LoginPage({
       <div className="flex flex-1 flex-col justify-center px-6 py-12 lg:px-16 xl:px-24">
         <div className="mx-auto w-full max-w-sm">
           <div className="mb-10 lg:hidden">
+            <div className="relative h-12 w-32 mb-4">
+              <Image
+                src="/logo.png"
+                alt="Buho Property Logo"
+                fill
+                className="object-contain object-left"
+              />
+            </div>
             <h2 className="font-heading text-2xl font-bold tracking-tight">Bienvenido a Búho Core</h2>
           </div>
           

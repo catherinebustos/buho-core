@@ -32,6 +32,8 @@ export async function createCatalogRow(table: SimpleCatalogTable, formData: Form
   if (table === 'items') {
     payload.category_id = String(formData.get('category_id') ?? '');
     payload.unit = String(formData.get('unit') ?? 'unidad');
+    const uPkg = Number(formData.get('units_per_package'));
+    payload.units_per_package = uPkg >= 1 ? uPkg : 1;
   }
   if (table === 'suppliers') {
     const notes = String(formData.get('notes') ?? '').trim();

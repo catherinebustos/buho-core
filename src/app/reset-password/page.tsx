@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
@@ -34,8 +35,13 @@ export default function ResetPasswordPage() {
     <main className="flex min-h-dvh items-center justify-center bg-[#FDFDFD] px-6">
       <div className="w-full max-w-sm space-y-8">
         <div>
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-2xl font-black text-white shadow-xl mb-6">
-            B
+          <div className="relative h-12 w-32 mb-6">
+            <Image
+              src="/logo.png"
+              alt="Buho Property Logo"
+              fill
+              className="object-contain object-left"
+            />
           </div>
           <h1 className="font-heading text-2xl font-black tracking-tight text-zinc-900">
             Nueva contraseña

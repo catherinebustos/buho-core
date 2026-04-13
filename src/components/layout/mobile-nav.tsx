@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import {
   Menu,
@@ -124,8 +125,13 @@ export function MobileNav({ role, fullName }: MobileNavProps) {
           <div className="absolute left-0 top-0 flex h-full w-72 flex-col bg-white shadow-2xl">
             <div className="flex h-16 items-center justify-between border-b border-zinc-100 px-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-zinc-900 text-base font-black text-white shadow-sm">
-                  B
+                <div className="relative h-10 w-10">
+                  <Image
+                    src="/logo.png"
+                    alt="Buho Property"
+                    fill
+                    className="object-contain"
+                  />
                 </div>
                 <div className="flex flex-col">
                   <span className="font-heading text-lg font-bold tracking-tight text-zinc-900">Búho Core</span>

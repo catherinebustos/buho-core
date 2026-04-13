@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { cookies } from 'next/headers';
 import { requireProfile, PREVIEW_COOKIE } from '@/lib/auth';
 import { Sidebar } from '@/components/layout/sidebar';
@@ -30,8 +31,13 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         {/* Sidebar desktop - Super Clean */}
         <aside className="hidden w-64 flex-col bg-white z-10 md:flex my-4 ml-4">
           <div className="flex h-20 items-center gap-4 px-6">
-            <div className="flex h-10 w-10 items-center justify-center rounded-[1rem] bg-primary text-xl font-bold text-white shadow-lg shadow-primary/20">
-              B
+            <div className="relative h-10 w-10">
+              <Image
+                src="/logo.png"
+                alt="Buho Property"
+                fill
+                className="object-contain"
+              />
             </div>
             <div>
               <p className="font-heading text-lg font-extrabold tracking-tight text-foreground">Búho Core</p>

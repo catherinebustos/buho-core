@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { Trash2, Plus } from 'lucide-react';
+import { Trash2, Plus, Package } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,14 +11,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { formatCLP } from '@/lib/utils';
 import type { Tables } from '@/lib/types/database.generated';
-type Item = Tables<'items'>;
+type Item = Tables<'items'> & { units_per_package?: number };
 type Property = Tables<'properties'>;
 type Supplier = Tables<'suppliers'>;
 
 interface Line {
   key: string;
   item_id: string;
-  property_id: string;
   quantity: string;
   unit_price: string;
   notes: string;
@@ -28,7 +27,6 @@ function newLine(): Line {
   return {
     key: Math.random().toString(36).slice(2, 10),
     item_id: '',
-    property_id: '',
     quantity: '1',
     unit_price: '0',
     notes: ''
@@ -41,10 +39,30 @@ interface TicketFormProps {
   items: Item[];
   properties: Pick<Property, 'id' | 'nickname'>[];
   error?: string;
+  defaultValues?: {
+    ticket_number?: string;
+    purchase_date?: string;
+    supplier_id?: string;
+    property_id?: string;
+    notes?: string;
+    lines?: Line[];
+  };
+  submitLabel?: string;
+  /** Campos ocultos adicionales que se inyectan en el form (ej: id para edición) */
+  hiddenFields?: Record<string, string>;
 }
 
-export function TicketForm({ action, suppliers, items, properties, error }: TicketFormProps) {
-  const [lines, setLines] = useState<Line[]>([newLine()]);
+export function TicketForm({
+  action,
+  suppliers,
+  items,
+  properties,
+  error,
+  defaultValues,
+  submitLabel = 'Crear ticket',
+  hiddenFields
+}: TicketFormProps) {
+  const [lines, setLines] = useState<Line[]>(defaultValues?.lines ?? [newLine()]);
 
   const total = useMemo(
     () =>
@@ -62,7 +80,6 @@ export function TicketForm({ action, suppliers, items, properties, error }: Tick
           .filter((l) => l.item_id && Number(l.quantity) > 0)
           .map((l) => ({
             item_id: l.item_id,
-            property_id: l.property_id || null,
             quantity: Number(l.quantity),
             unit_price: Number(l.unit_price),
             notes: l.notes || null
@@ -77,6 +94,8 @@ export function TicketForm({ action, suppliers, items, properties, error }: Tick
   const remove = (key: string) =>
     setLines((prev) => (prev.length > 1 ? prev.filter((l) => l.key !== key) : prev));
 
+  const getItem = (id: string) => items.find((i) => i.id === id);
+
   return (
     <form action={action} className="space-y-6">
       {error ? (
@@ -86,16 +105,26 @@ export function TicketForm({ action, suppliers, items, properties, error }: Tick
       ) : null}
 
       <input type="hidden" name="lines" value={serializedLines} />
+      {hiddenFields &&
+        Object.entries(hiddenFields).map(([k, v]) => (
+          <input key={k} type="hidden" name={k} value={v} />
+        ))}
 
+      {/* ── Datos del ticket ── */}
       <Card>
         <CardHeader>
           <CardTitle className="text-base">Datos del ticket</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-4 md:grid-cols-3">
             <div className="space-y-2">
-              <Label htmlFor="ticket_number">Número de ticket *</Label>
-              <Input id="ticket_number" name="ticket_number" required />
+              <Label htmlFor="ticket_number">N° ticket *</Label>
+              <Input
+                id="ticket_number"
+                name="ticket_number"
+                required
+                defaultValue={defaultValues?.ticket_number}
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="purchase_date">Fecha de compra *</Label>
@@ -103,29 +132,51 @@ export function TicketForm({ action, suppliers, items, properties, error }: Tick
                 id="purchase_date"
                 name="purchase_date"
                 type="date"
-                defaultValue={new Date().toISOString().slice(0, 10)}
+                defaultValue={
+                  defaultValues?.purchase_date ?? new Date().toISOString().slice(0, 10)
+                }
                 required
               />
             </div>
-            <div className="space-y-2 md:col-span-2">
+            <div className="space-y-2">
               <Label htmlFor="supplier_id">Proveedor *</Label>
               <FormSelect
                 name="supplier_id"
                 required
-                options={suppliers.map(s => ({ label: s.name, value: s.id }))}
+                defaultValue={defaultValues?.supplier_id}
+                options={suppliers.map((s) => ({ label: s.name, value: s.id }))}
               />
             </div>
             <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="property_id">Propiedad asociada</Label>
+              <FormSelect
+                name="property_id"
+                placeholder="Gasto general (sin propiedad)"
+                defaultValue={defaultValues?.property_id ?? ''}
+                options={[
+                  { label: 'Gasto general (sin propiedad)', value: '' },
+                  ...properties.map((p) => ({ label: p.nickname, value: p.id }))
+                ]}
+              />
+            </div>
+            <div className="space-y-2">
               <Label htmlFor="notes">Notas</Label>
-              <Textarea id="notes" name="notes" rows={2} />
+              <Textarea
+                id="notes"
+                name="notes"
+                rows={1}
+                className="resize-none"
+                defaultValue={defaultValues?.notes}
+              />
             </div>
           </div>
         </CardContent>
       </Card>
 
+      {/* ── Ítems comprados ── */}
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-base">Líneas del ticket</CardTitle>
+        <CardHeader className="flex flex-row items-center justify-between pb-3">
+          <CardTitle className="text-base">Ítems comprados</CardTitle>
           <Button
             type="button"
             variant="outline"
@@ -133,81 +184,123 @@ export function TicketForm({ action, suppliers, items, properties, error }: Tick
             onClick={() => setLines((prev) => [...prev, newLine()])}
           >
             <Plus className="h-4 w-4" />
-            Agregar línea
+            Agregar ítem
           </Button>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-2">
+          {/* Cabeceras de columna — solo desktop */}
+          <div className="hidden grid-cols-12 gap-2 px-1 text-xs font-medium text-muted-foreground md:grid">
+            <div className="col-span-5">Ítem</div>
+            <div className="col-span-2 text-center">Cantidad</div>
+            <div className="col-span-2 text-right">Precio unit.</div>
+            <div className="col-span-2 text-right">Subtotal</div>
+            <div className="col-span-1" />
+          </div>
+
           {lines.map((line) => {
-            const lineTotal = (Number(line.quantity) || 0) * (Number(line.unit_price) || 0);
+            const item = getItem(line.item_id);
+            const uPkg: number = item ? ((item as any).units_per_package ?? 1) : 1;
+            const qty = Number(line.quantity) || 0;
+            const lineTotal = qty * (Number(line.unit_price) || 0);
+            const totalUnits = qty * uPkg;
+
             return (
               <div
                 key={line.key}
-                className="grid gap-3 rounded-md border border-border p-3 md:grid-cols-12"
+                className="grid grid-cols-12 items-start gap-2 rounded-md border border-border bg-muted/20 p-2"
               >
-                <div className="space-y-1 md:col-span-4">
-                  <Label className="text-xs">Ítem</Label>
+                {/* Ítem + info de contenido + notas */}
+                <div className="col-span-12 md:col-span-5">
+                  <Label className="mb-1 block text-xs md:hidden">Ítem</Label>
                   <FormSelect
                     value={line.item_id}
                     onChange={(val) => update(line.key, { item_id: val })}
-                    options={items.map(i => ({ label: i.name, value: i.id }))}
+                    placeholder="— Selecciona ítem —"
+                    options={items.map((i) => ({ label: i.name, value: i.id }))}
+                  />
+                  {item && uPkg > 1 && (
+                    <div className="mt-1 flex items-center gap-1 text-xs text-blue-600 dark:text-blue-400">
+                      <Package className="h-3 w-3 shrink-0" />
+                      <span>
+                        {uPkg} {item.unit ?? 'unidades'}/unidad comprada
+                        {qty > 0 && (
+                          <>
+                            {' '}· total:{' '}
+                            <strong>
+                              {totalUnits} {item.unit ?? 'unidades'}
+                            </strong>
+                          </>
+                        )}
+                      </span>
+                    </div>
+                  )}
+                  <Input
+                    className="mt-1.5 h-7 text-xs placeholder:text-muted-foreground/60"
+                    placeholder="Nota de línea (opcional)"
+                    value={line.notes}
+                    onChange={(e) => update(line.key, { notes: e.target.value })}
                   />
                 </div>
-                <div className="space-y-1 md:col-span-3">
-                  <Label className="text-xs">Propiedad (opcional)</Label>
-                  <FormSelect
-                    value={line.property_id}
-                    onChange={(val) => update(line.key, { property_id: val })}
-                    placeholder="Gasto general"
-                    options={[
-                      { label: 'Gasto general', value: '' },
-                      ...properties.map(p => ({ label: p.nickname, value: p.id }))
-                    ]}
-                  />
-                </div>
-                <div className="space-y-1 md:col-span-1">
-                  <Label className="text-xs">Cant.</Label>
+
+                {/* Cantidad */}
+                <div className="col-span-4 md:col-span-2">
+                  <Label className="mb-1 block text-xs md:hidden">Cant.</Label>
                   <Input
                     type="number"
-                    min="0"
+                    min="0.01"
                     step="0.01"
                     value={line.quantity}
                     onChange={(e) => update(line.key, { quantity: e.target.value })}
+                    className="text-center"
                   />
+                  {item && (
+                    <div className="mt-0.5 text-center text-xs text-muted-foreground">
+                      {item.unit ?? 'unidad'}
+                    </div>
+                  )}
                 </div>
-                <div className="space-y-1 md:col-span-2">
-                  <Label className="text-xs">Precio unit.</Label>
+
+                {/* Precio unitario */}
+                <div className="col-span-4 md:col-span-2">
+                  <Label className="mb-1 block text-xs md:hidden">Precio unit.</Label>
                   <Input
                     type="number"
                     min="0"
-                    step="0.01"
+                    step="1"
                     value={line.unit_price}
                     onChange={(e) => update(line.key, { unit_price: e.target.value })}
+                    className="text-right"
                   />
                 </div>
-                <div className="space-y-1 md:col-span-2">
-                  <Label className="text-xs">Subtotal</Label>
-                  <div className="flex h-10 items-center justify-end rounded-md border border-dashed border-border px-3 text-sm tabular-nums">
+
+                {/* Subtotal */}
+                <div className="col-span-3 md:col-span-2">
+                  <Label className="mb-1 block text-xs md:hidden">Subtotal</Label>
+                  <div className="flex h-10 items-center justify-end rounded-md border border-dashed border-border px-2 text-sm font-medium tabular-nums">
                     {formatCLP(lineTotal)}
                   </div>
                 </div>
-                <div className="flex items-end md:col-span-12 md:justify-end">
+
+                {/* Eliminar */}
+                <div className="col-span-1 flex justify-end pt-1">
                   <Button
                     type="button"
                     variant="ghost"
-                    size="sm"
+                    size="icon"
+                    className="h-8 w-8 text-muted-foreground hover:text-destructive"
                     onClick={() => remove(line.key)}
                     disabled={lines.length === 1}
                   >
                     <Trash2 className="h-4 w-4" />
-                    Quitar línea
                   </Button>
                 </div>
               </div>
             );
           })}
 
-          <div className="flex items-center justify-end gap-3 border-t border-border pt-4">
-            <span className="text-sm text-muted-foreground">Total:</span>
+          {/* Total */}
+          <div className="flex items-center justify-end gap-3 border-t border-border pt-3">
+            <span className="text-sm text-muted-foreground">Total del ticket:</span>
             <span className="text-2xl font-bold tabular-nums">{formatCLP(total)}</span>
           </div>
         </CardContent>
@@ -219,7 +312,7 @@ export function TicketForm({ action, suppliers, items, properties, error }: Tick
             Cancelar
           </Button>
         </a>
-        <Button type="submit">Crear ticket</Button>
+        <Button type="submit">{submitLabel}</Button>
       </div>
     </form>
   );
